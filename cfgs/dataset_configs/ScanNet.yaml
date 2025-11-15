@@ -1,0 +1,5 @@
+NAME: CRNShapeNet
+DATA_PATH: data/our_data #virtual dataset
+N_POINTS: 2048
+CLASS_CHOICE: table
+SPLIT: train

@@ -1,0 +1,7 @@
+NAME: CRNShapeNet
+DATA_PATH: data/our_data #virtual dataset
+REALDATA_Train_PATH: data/realscans_data/KITTI_frustum_data_for_pcl2pcl/point_cloud_train/
+REALDATA_Test_PATH: data/realscans_data/KITTI_frustum_data_for_pcl2pcl/point_cloud_val/
+N_POINTS: 2048
+CLASS_CHOICE: car
+SPLIT: train
