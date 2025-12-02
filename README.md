@@ -5,7 +5,8 @@ Point Transformers (PoinTr) have shown great potential in point cloud completion
 
 <img width="2633" height="1299" alt="image" src="https://github.com/user-attachments/assets/9c140922-9c5c-4cb1-ab94-dffbf13d7b2c" />
 
-# Cite this Work
+## 📄 Citation (If you find our work useful, please cite)
+```bibtex
 @inproceedings{li2025dapointr,
   title={Dapointr: Domain adaptive point transformer for point cloud completion},
   author={Li, Yinghui and Zhou, Qianyu and Gong, Jingyu and Zhu, Ye and Dazeley, Richard and Zhao, Xinkui and Lu, Xuequan},
