@@ -6,6 +6,7 @@ Point Transformers (PoinTr) have shown great potential in point cloud completion
 <img width="2633" height="1299" alt="image" src="https://github.com/user-attachments/assets/9c140922-9c5c-4cb1-ab94-dffbf13d7b2c" />
 
 ## 📄 Citation (If you find our work useful, please cite)
+
 ```bibtex
 @inproceedings{li2025dapointr,
   title={Dapointr: Domain adaptive point transformer for point cloud completion},
@@ -16,3 +17,6 @@ Point Transformers (PoinTr) have shown great potential in point cloud completion
   pages={5066--5074},
   year={2025}
 }
+```
+# Acknowledgement
+This code is based on [PoinTr](https://openaccess.thecvf.com/content/ICCV2021/html/Yu_PoinTr_Diverse_Point_Cloud_Completion_With_Geometry-Aware_Transformers_ICCV_2021_paper.html). The models used for partial and complete shape generation are from 3D-FUTURE, ModelNet, CRN, and real-world point clouds. If you find they are useful, please also cite them in your work.
