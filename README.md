@@ -5,6 +5,9 @@ Point Transformers (PoinTr) have shown great potential in point cloud completion
 
 <img width="2633" height="1299" alt="image" src="https://github.com/user-attachments/assets/9c140922-9c5c-4cb1-ab94-dffbf13d7b2c" />
 
+# Real World Scans Datasets
+We conduct exeprimenst on multiple real-world datasets, including [ScanNet](https://drive.google.com/drive/folders/1xNYMWBdQq4F-JwOkrIU-VnBK3NTECEg1?usp=sharing), [MatterPort3D](https://drive.google.com/drive/folders/1xNYMWBdQq4F-JwOkrIU-VnBK3NTECEg1?usp=sharing), and [KITTI](https://drive.google.com/drive/folders/1xNYMWBdQq4F-JwOkrIU-VnBK3NTECEg1?usp=sharing). We use the [CRN](https://github.com/xiaogangw/cascaded-point-completion) as our source domain and obtain the partial and complete shapes from [CRN dataset](https://drive.google.com/file/d/1MzVZLhXOgfaLZjn1jDrwuiCB-XCfaB-w/view?usp=sharing).
+
 ## 📄 Citation (If you find our work useful, please cite)
 
 ```bibtex
