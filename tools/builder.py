@@ -1,23 +1,18 @@
 import os, sys
-# online package
 import torch
-# optimizer
 import torch.optim as optim
 from timm.scheduler import CosineLRScheduler
-# dataloader
 from datasets import build_dataset_from_cfg
 from models import build_model_from_cfg
-# utils
 from utils.logger import *
 from utils.misc import *
 from datasets.ply_dataset import PlyDataset
 from datasets.ply_dataset import GeneratedDataset
 from datasets.ply_dataset import RealDataset
-#from datasets.CRN_Dataset import CRNShapeNet
 from torch.utils.data import ConcatDataset
 
 #Virtual Dataset Builder
-def virtual_dataset_builder(args, config):  #config others：subnet:train, bs:96
+def virtual_dataset_builder(args, config):  
     #loading data
     if config.virtual_dataset in ['ScanNet', 'MatterPort']:
         args.split = 'trainval'
@@ -28,8 +23,8 @@ def virtual_dataset_builder(args, config):  #config others：subnet:train, bs:96
     elif config.virtual_dataset in ['ModelNet', '3D_FUTURE']:
         dataset = GeneratedDataset(args)
     else:
-        dataset = build_dataset_from_cfg(config._base_, config.others)  #这里调用CRNDataset文件，config._base_ 读取cfgs/datasets/.yaml文件：数据的配置文件，包括文件路径
-        shuffle = config._base_.SPLIT == 'train'   #判断为True
+        dataset = build_dataset_from_cfg(config._base_, config.others)  
+        shuffle = config._base_.SPLIT == 'train'   
     
     if args.distributed:
         sampler = torch.utils.data.distributed.DistributedSampler(dataset, shuffle = shuffle)
@@ -48,7 +43,7 @@ def virtual_dataset_builder(args, config):  #config others：subnet:train, bs:96
     return sampler, dataloader
 
 #Real Dataset Builder
-def real_dataset_builder(args, config,additional_dataset = None):  #config others：subnet:train, bs:96
+def real_dataset_builder(args, config,additional_dataset = None):  
     #loading data
     if config.real_dataset in ['ScanNet', 'MatterPort']:
         config.split = 'trainval'
@@ -59,9 +54,9 @@ def real_dataset_builder(args, config,additional_dataset = None):  #config other
     elif config.real_dataset in ['ModelNet', '3D_FUTURE']:
         dataset = GeneratedDataset(config)
         shuffle = config._base_.SPLIT == 'train' 
-    else:#if config.real_dataset in ['CRN']:
+    else:#
         dataset = build_dataset_from_cfg(config._base_, config.others) 
-        shuffle = config._base_.SPLIT == 'train'   #判断为True
+        shuffle = config._base_.SPLIT == 'train'   
     if additional_dataset is not None:
         dataset = ConcatDataset([dataset, additional_dataset])
     if args.distributed:
