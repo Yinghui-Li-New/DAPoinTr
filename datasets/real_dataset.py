@@ -143,8 +143,8 @@ class RealWorldPointsDataset:
             print('Reading and caching...')
             mesh_list = []
             for mn in tqdm(mesh_filenames):
-                m_fn = os.path.join(mesh_dir, mn)
-                mesh = trimesh.load(m_fn)
+                #m_fn = os.path.join(mesh_dir, mn)
+                mesh = trimesh.load(mn)
             
                 mesh_list.append(mesh)
             
@@ -212,7 +212,7 @@ class RealWorldPointsDataset:
         return self.npoint
 
 if __name__=='__main__':
-    REALDATASET = RealWorldPointsDataset('../datasets/data/scannet_v2_chairs_aligned/point_cloud', batch_size=6, npoint=2048,  shuffle=False, split='trainval', random_seed=0)
+    REALDATASET = RealWorldPointsDataset('../datasets/data/realscans_data/scannet_v2_chairs_aligned/point_cloud', batch_size=6, npoint=2048,  shuffle=False, split='trainval', random_seed=0)
     points = REALDATASET.point_clouds[0] 
     xs = points[:,0]
     ys = points[:,2]
