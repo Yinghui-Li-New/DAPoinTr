@@ -89,26 +89,29 @@ class RealDataset(data.Dataset):
         Dataset provided by MPC
 
     """
-    def __init__(self, args):
-        #self.dataset = args.dataset
-        #self.dataset_path = args.dataset_path
-        self.dataset = args.realdataset#'ScanNet'
+    def __init__(self, config):
+        self.dataset = config.real_dataset
+        self.category = config._base_.CLASS_CHOICE
+        requested_split = config._base_.SPLIT
+        scan_split = 'trainval' if requested_split == 'train' else requested_split
         self.random_seed = 0
         self.rand_gen = RandomState(self.random_seed)
 
         if self.dataset in ['MatterPort', 'ScanNet', 'KITTI']:
             if self.dataset == 'ScanNet':
-                REALDATASET = RealWorldPointsDataset('./datasets/data/scannet_v2_'+args.class_choice+'s_aligned/point_cloud', batch_size=6, npoint=2048,  shuffle=False, split=args.split, random_seed=0)
+                REALDATASET = RealWorldPointsDataset('./data/realscans_data/scannet_v2_'+self.category+'s_aligned/point_cloud', batch_size=6, npoint=2048, shuffle=False, split=scan_split, random_seed=0)
             elif self.dataset == 'MatterPort':
-                if args.split in ['train', 'trainval']:
-                    REALDATASET = RealWorldPointsDataset('./datasets/data/scannet_v2_'+args.class_choice+'s_aligned/point_cloud', batch_size=6, npoint=2048,  shuffle=False, split=args.split, random_seed=0)
+                if requested_split in ['train', 'trainval']:
+                    REALDATASET = RealWorldPointsDataset('./data/realscans_data/scannet_v2_'+self.category+'s_aligned/point_cloud', batch_size=6, npoint=2048, shuffle=False, split='trainval', random_seed=0)
                 else:
-                    REALDATASET = RealWorldPointsDataset('./datasets/data/MatterPort_v1_'+args.class_choice+'_Yup_aligned/point_cloud', batch_size=6, npoint=2048,  shuffle=False, split=args.split, random_seed=0)
+                    REALDATASET = RealWorldPointsDataset('./data/realscans_data/MatterPort_v1_'+self.category+'_Yup_aligned/point_cloud', batch_size=6, npoint=2048, shuffle=False, split=requested_split, random_seed=0)
             elif self.dataset == 'KITTI':
-                if args.split in ['train']:
-                    REALDATASET = KITTIDataset('./datasets/data/KITTI_frustum_data_for_pcl2pcl/point_cloud_train/')
-                elif args.split in ['test', 'val']:
-                    REALDATASET = KITTIDataset('./datasets/data/KITTI_frustum_data_for_pcl2pcl/point_cloud_val/')
+                if requested_split == 'train':
+                    REALDATASET = KITTIDataset(config._base_.REALDATA_Train_PATH)
+                elif requested_split in ['test', 'val']:
+                    REALDATASET = KITTIDataset(config._base_.REALDATA_Test_PATH)
+                else:
+                    raise ValueError('Unsupported KITTI split: %s' % requested_split)
             input_ls = REALDATASET.point_clouds 
             # swap axis as pcl2pcl and ShapeInversion have different canonical pose
             input_ls_swapped = [np.float32(swap_axis(itm, swap_mode='n210')) for itm in input_ls]
