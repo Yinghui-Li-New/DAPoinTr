@@ -9,6 +9,7 @@ from utils.misc import *
 from datasets.ply_dataset import PlyDataset
 from datasets.ply_dataset import GeneratedDataset
 from datasets.ply_dataset import RealDataset
+#from datasets.CRN_Dataset import CRNShapeNet
 from torch.utils.data import ConcatDataset
 
 #Virtual Dataset Builder
@@ -23,8 +24,8 @@ def virtual_dataset_builder(args, config):
     elif config.virtual_dataset in ['ModelNet', '3D_FUTURE']:
         dataset = GeneratedDataset(args)
     else:
-        dataset = build_dataset_from_cfg(config._base_, config.others)  
-        shuffle = config._base_.SPLIT == 'train'   
+        dataset = build_dataset_from_cfg(config._base_, config.others)  #这里调用CRNDataset文件，config._base_ 读取cfgs/datasets/.yaml文件：数据的配置文件，包括文件路径
+        shuffle = config._base_.SPLIT == 'train'   #判断为True
     
     if args.distributed:
         sampler = torch.utils.data.distributed.DistributedSampler(dataset, shuffle = shuffle)
@@ -45,21 +46,13 @@ def virtual_dataset_builder(args, config):
 #Real Dataset Builder
 def real_dataset_builder(args, config,additional_dataset = None):  
     #loading data
-    if config.real_dataset == 'ScanNet':
-        requested_split = config._base_.SPLIT
-        config.split = 'trainval' if requested_split == 'train' else requested_split
-    elif config.real_dataset == 'MatterPort':
-        config.split = 'trainval'
-    if config.real_dataset in ['ModelNet', '3D_FUTURE', 'KITTI', 'CRN']:
-        args.split='train'
+    shuffle = config._base_.SPLIT in ['train', 'trainval']
     if config.real_dataset in ['MatterPort','ScanNet','KITTI','PartNet']:
         dataset = RealDataset(config)
     elif config.real_dataset in ['ModelNet', '3D_FUTURE']:
         dataset = GeneratedDataset(config)
-        shuffle = config._base_.SPLIT == 'train' 
-    else:#
+    else:
         dataset = build_dataset_from_cfg(config._base_, config.others) 
-        shuffle = config._base_.SPLIT == 'train'   
     if additional_dataset is not None:
         dataset = ConcatDataset([dataset, additional_dataset])
     if args.distributed:
@@ -146,8 +139,6 @@ def resume_model(base_model, args, logger = None):
     # load state dict
     map_location = {'cuda:%d' % 0: 'cuda:%d' % args.local_rank}
     state_dict = torch.load(ckpt_path, map_location=map_location)
-    # parameter resume of base model
-    # if args.local_rank == 0:
     base_ckpt = {k.replace("module.", ""): v for k, v in state_dict['base_model'].items()}
     base_model.load_state_dict(base_ckpt)
 
