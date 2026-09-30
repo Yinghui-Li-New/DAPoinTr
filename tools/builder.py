@@ -45,7 +45,10 @@ def virtual_dataset_builder(args, config):
 #Real Dataset Builder
 def real_dataset_builder(args, config,additional_dataset = None):  
     #loading data
-    if config.real_dataset in ['ScanNet', 'MatterPort']:
+    if config.real_dataset == 'ScanNet':
+        requested_split = config._base_.SPLIT
+        config.split = 'trainval' if requested_split == 'train' else requested_split
+    elif config.real_dataset == 'MatterPort':
         config.split = 'trainval'
     if config.real_dataset in ['ModelNet', '3D_FUTURE', 'KITTI', 'CRN']:
         args.split='train'
